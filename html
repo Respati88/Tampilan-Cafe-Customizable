@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nook & Brew Co. - Aesthetic Cafe & Eatery</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            bg: '#FAF7F5',
+                            card: '#FFFFFF',
+                            primary: '#2D3A34', // Deep Matcha / Pine Green
+                            accent: '#E07A5F',  // Warm Terracotta
+                            cream: '#F3EDE6',
+                            textDark: '#1C1917',
+                            textMuted: '#78716C'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FAF7F5;
+            color: #1C1917;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF7F5;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D6CEC7;
+            border-radius: 10px;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-brand-accent selection:text-white pb-20 md:pb-0">
+
+    <!-- Top Announcement Bar -->
+    <div class="bg-brand-primary text-white text-xs py-2 px-4 text-center font-medium flex justify-center items-center gap-2">
+        <span class="bg-brand-accent text-white px-2 py-0.5 rounded-full text-[10px] uppercase font-bold tracking-wider">PROMO GEN-Z</span>
+        <span>Gunakan kode promo <strong class="underline decoration-wavy decoration-brand-accent">GENZ20</strong> untuk diskon 20% pertama kamu! ✨</span>
+    </div>
+
+    <!-- Main Navigation Header -->
+    <header class="sticky top-0 z-40 bg-brand-bg/90 backdrop-blur-md border-b border-stone-200/60 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+            
+            <!-- Logo -->
+            <a href="#" class="flex items-center gap-2.5 group">
+                <div class="w-10 h-10 rounded-2xl bg-brand-primary text-white flex items-center justify-center font-bold text-xl shadow-md group-hover:scale-105 transition-transform duration-300">
+                    N
+                </div>
+                <div>
+                    <span class="font-extrabold text-lg sm:text-xl text-brand-textDark tracking-tight block leading-tight">Nook & Brew<span class="text-brand-accent">.</span></span>
+                    <span class="text-[10px] text-brand-textMuted uppercase tracking-widest font-semibold block">Aesthetic Cafe & Culinary</span>
+                </div>
+            </a>
+
+            <!-- Quick Search Bar (Desktop) -->
+            <div class="hidden md:flex flex-1 max-w-md mx-8 relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-stone-400"></i>
+                <input type="text" id="searchInput" oninput="handleSearch(this.value)" placeholder="Cari Matchalatte, Truffle Pasta, Burger..." 
+                       class="w-full bg-stone-100 hover:bg-stone-200/70 focus:bg-white text-sm pl-11 pr-4 py-2.5 rounded-2xl border border-transparent focus:border-brand-primary/30 outline-none transition-all duration-200">
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex items-center gap-3">
+                <!-- Order Mode Pill Toggle -->
+                <div class="bg-stone-200/70 p-1 rounded-2xl hidden lg:flex items-center text-xs font-semibold">
+                    <button onclick="setOrderType('dine-in')" id="btnDineIn" class="px-3 py-1.5 rounded-xl transition-all duration-200 bg-white text-brand-primary shadow-sm">
+                        <i class="fa-solid fa-utensils mr-1.5"></i> Dine-In
+                    </button>
+                    <button onclick="setOrderType('takeaway')" id="btnTakeaway" class="px-3 py-1.5 rounded-xl transition-all duration-200 text-stone-600 hover:text-stone-900">
+                        <i class="fa-solid fa-bag-shopping mr-1.5"></i> Takeaway
+                    </button>
+                    <button onclick="setOrderType('delivery')" id="btnDelivery" class="px-3 py-1.5 rounded-xl transition-all duration-200 text-stone-600 hover:text-stone-900">
+                        <i class="fa-solid fa-motorcycle mr-1.5"></i> Delivery
+                    </button>
+                </div>
+
+                <!-- Spotify Vibe Button -->
+                <a href="https://spotify.com" target="_blank" title="Dengarkan Playlist Kafe Kami" class="p-2.5 bg-stone-100 hover:bg-emerald-100 text-emerald-700 rounded-2xl transition-all flex items-center justify-center">
+                    <i class="fa-brands fa-spotify text-lg"></i>
+                </a>
+
+                <!-- Cart Trigger Button -->
+                <button onclick="toggleCartDrawer()" class="relative bg-brand-primary text-white p-3 sm:px-4 sm:py-2.5 rounded-2xl font-medium text-sm flex items-center gap-2 hover:bg-stone-800 transition-all duration-200 shadow-md">
+                    <i class="fa-solid fa-basket-shopping text-base"></i>
+                    <span class="hidden sm:inline font-semibold">Pesanan</span>
+                    <span id="cartBadgeCount" class="bg-brand-accent text-white text-xs font-bold px-2 py-0.5 rounded-full min-w-[20px] text-center">0</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Search Input Bar -->
+        <div class="px-4 pb-3 md:hidden">
+            <div class="relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-stone-400"></i>
+                <input type="text" oninput="handleSearch(this.value)" placeholder="Cari makanan atau minuman favorit..." 
+                       class="w-full bg-stone-100 text-sm pl-11 pr-4 py-2.5 rounded-2xl border border-transparent focus:border-brand-primary/30 outline-none">
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Banner Section -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-2">
+        <div class="relative rounded-3xl overflow-hidden bg-gradient-to-r from-stone-900 via-brand-primary to-stone-900 text-white p-6 sm:p-10 shadow-2xl">
+            <!-- Background Aesthetic Overlay -->
+            <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-brand-accent/20 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute right-1/3 top-0 w-48 h-48 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none"></div>
+
+            <div class="relative z-10 max-w-2xl">
+                <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-3.5 py-1.5 rounded-full text-xs font-semibold mb-4 text-emerald-300 border border-white/10">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    Open Everyday 08:00 - 22:00 WIB • Wifi 100Mbps
+                </div>
+                <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight mb-3">
+                    Taste The Vibe, <br/>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-300 via-amber-200 to-emerald-300">Savor The Moments.</span>
+                </h1>
+                <p class="text-stone-300 text-xs sm:text-base font-normal mb-6 leading-relaxed">
+                    Seduh kopi racikan artisan barista, paduan mocktail menyegarkan, serta hidangan Main Dish premium pilihan Gen-Z. Siap menemani jam nugas maupun nongkrong santai.
+                </p>
+
+                <!-- Quick Category Highlights Pills -->
+                <div class="flex flex-wrap items-center gap-2 pt-2">
+                    <span class="text-xs text-stone-400 mr-2 font-medium">Populer:</span>
+                    <button onclick="filterCategory('beverage')" class="bg-white/10 hover:bg-white/20 text-xs text-stone-200 px-3 py-1.5 rounded-full transition-all">☕ Specialty Coffee</button>
+                    <button onclick="filterCategory('main-dish')" class="bg-white/10 hover:bg-white/20 text-xs text-stone-200 px-3 py-1.5 rounded-full transition-all">🍝 Truffle Pastas</button>
+                    <button onclick="filterCategory('dessert')" class="bg-white/10 hover:bg-white/20 text-xs text-stone-200 px-3 py-1.5 rounded-full transition-all">🥐 Croissants</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Category Filter Bar (Sticky) -->
+    <section class="sticky top-20 z-30 bg-brand-bg/95 backdrop-blur-md py-4 border-b border-stone-200/60 my-4">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between gap-4">
+                
+                <!-- Horizontal Scrollable Category Pills -->
+                <div class="flex items-center gap-2 overflow-x-auto hide-scrollbar py-1 text-sm font-medium w-full" id="categoryContainer">
+                    <button onclick="filterCategory('all')" id="cat-all" class="category-btn active bg-brand-primary text-white px-5 py-2.5 rounded-2xl whitespace-nowrap shadow-sm transition-all duration-200 font-semibold text-xs sm:text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-border-all"></i> Semua Menu
+                    </button>
+                    <button onclick="filterCategory('coffee')" id="cat-coffee" class="category-btn bg-white hover:bg-stone-100 text-brand-textDark border border-stone-200 px-5 py-2.5 rounded-2xl whitespace-nowrap transition-all duration-200 text-xs sm:text-sm flex items-center gap-2">
+                        <span>☕</span> Coffee Selection
+                    </button>
+                    <button onclick="filterCategory('non-coffee')" id="cat-non-coffee" class="category-btn bg-white hover:bg-stone-100 text-brand-textDark border border-stone-200 px-5 py-2.5 rounded-2xl whitespace-nowrap transition-all duration-200 text-xs sm:text-sm flex items-center gap-2">
+                        <span>🍵</span> Non-Coffee & Tea
+                    </button>
+                    <button onclick="filterCategory('main-dish')" id="cat-main-dish" class="category-btn bg-white hover:bg-stone-100 text-brand-textDark border border-stone-200 px-5 py-2.5 rounded-2xl whitespace-nowrap transition-all duration-200 text-xs sm:text-sm flex items-center gap-2">
+                        <span>🍝</span> Main Dish
+                    </button>
+                    <button onclick="filterCategory('snack')" id="cat-snack" class="category-btn bg-white hover:bg-stone-100 text-brand-textDark border border-stone-200 px-5 py-2.5 rounded-2xl whitespace-nowrap transition-all duration-200 text-xs sm:text-sm flex items-center gap-2">
+                        <span>🍟</span> Snacks & Bites
+                    </button>
+                    <button onclick="filterCategory('dessert')" id="cat-dessert" class="category-btn bg-white hover:bg-stone-100 text-brand-textDark border border-stone-200 px-5 py-2.5 rounded-2xl whitespace-nowrap transition-all duration-200 text-xs sm:text-sm flex items-center gap-2">
+                        <span>🍰</span> Sweets & Dessert
+                    </button>
+                </div>
+
+                <!-- Diet / Tag Quick Toggles -->
+                <div class="hidden lg:flex items-center gap-2 border-l border-stone-300 pl-4 min-w-fit">
+                    <button onclick="toggleBestSellerOnly()" id="btnBestSeller" class="text-xs bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200/80 px-3 py-2 rounded-xl font-medium transition-all flex items-center gap-1.5">
+                        <i class="fa-solid fa-fire text-amber-500"></i> Best Seller
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Menu Content Section -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex-1">
+        
+        <!-- Category Title & Counter -->
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h2 id="sectionTitle" class="text-2xl font-bold text-brand-textDark tracking-tight">Semua Menu Kafe</h2>
+                <p id="sectionSubtitle" class="text-xs text-brand-textMuted mt-0.5">Pilihan hidangan utama & minuman segar untuk menemani harimu</p>
+            </div>
+            <span id="itemCount" class="text-xs font-semibold bg-stone-200 text-stone-700 px-3 py-1 rounded-full">10 Items</span>
+        </div>
+
+        <!-- Product Cards Grid -->
+        <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- Dynamic JavaScript Product Injection -->
+        </div>
+
+        <!-- Empty Search State -->
+        <div id="emptyState" class="hidden text-center py-16">
+            <div class="w-20 h-20 bg-stone-200 text-stone-400 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">
+                <i class="fa-solid fa-mug-hot"></i>
+            </div>
+            <h3 class="text-lg font-bold text-stone-800">Menu Tidak Ditemukan</h3>
+            <p class="text-xs text-stone-500 max-w-sm mx-auto mt-1">Maaf, kata kunci atau filter yang kamu cari belum tersedia. Coba cari menu menarik lainnya!</p>
+            <button onclick="resetFilters()" class="mt-4 bg-brand-primary text-white text-xs font-semibold px-4 py-2 rounded-xl">Reset Filter</button>
+        </div>
+
+    </main>
+
+    <!-- Product Customization Modal -->
+    <div id="customModal" class="fixed inset-0 z-50 hidden bg-stone-900/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4 transition-opacity">
+        <div class="bg-white w-full sm:max-w-lg rounded-t-3xl sm:rounded-3xl max-h-[90vh] flex flex-col overflow-hidden shadow-2xl animate-in slide-in-from-bottom duration-300">
+            
+            <!-- Modal Header with Image -->
+            <div class="relative h-48 sm:h-56 bg-stone-100 overflow-hidden">
+                <img id="modalImg" src="" alt="Product" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=600&q=80';" class="w-full h-full object-cover">
+                <button onclick="closeModal()" class="absolute top-3 right-3 bg-white/80 hover:bg-white text-stone-800 w-9 h-9 rounded-full flex items-center justify-center shadow-md backdrop-blur-md transition-all">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+                <div class="absolute bottom-3 left-3 bg-black/60 backdrop-blur-md text-white text-xs font-bold px-3 py-1 rounded-full" id="modalCategoryBadge">
+                    Category
+                </div>
+            </div>
+
+            <!-- Modal Body (Scrollable Options) -->
+            <div class="p-6 overflow-y-auto flex-1 space-y-6">
+                <div>
+                    <div class="flex justify-between items-start">
+                        <h3 id="modalTitle" class="text-xl font-bold text-stone-900">Item Title</h3>
+                        <span id="modalBasePrice" class="text-lg font-extrabold text-brand-accent">Rp 0</span>
+                    </div>
+                    <p id="modalDescription" class="text-xs text-stone-500 mt-1.5 leading-relaxed">Detailed description goes here.</p>
+                </div>
+
+                <!-- Customization Form Options -->
+                <form id="customizationForm" class="space-y-5">
+                    
+                    <!-- Beverage Temperature Option (If Applicable) -->
+                    <div id="tempOptionGroup" class="space-y-2">
+                        <label class="block text-xs font-bold uppercase text-stone-500 tracking-wider">Suhu Minuman</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <label class="cursor-pointer">
+                                <input type="radio" name="temperature" value="Iced" checked class="peer hidden">
+                                <div class="p-2.5 text-center text-xs font-semibold rounded-xl border border-stone-200 peer-checked:border-brand-primary peer-checked:bg-stone-900 peer-checked:text-white transition-all">
+                                    ❄️ Iced (Dingin)
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="temperature" value="Hot" class="peer hidden">
+                                <div class="p-2.5 text-center text-xs font-semibold rounded-xl border border-stone-200 peer-checked:border-brand-primary peer-checked:bg-stone-900 peer-checked:text-white transition-all">
+                                    🔥 Hot (Hangat)
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Sugar Level Option (Beverages) -->
+                    <div id="sugarOptionGroup" class="space-y-2">
+                        <label class="block text-xs font-bold uppercase text-stone-500 tracking-wider">Tingkat Manis (Sugar Level)</label>
+                        <div class="grid grid-cols-4 gap-2 text-xs">
+                            <label class="cursor-pointer">
+                                <input type="radio" name="sugar" value="100% Normal" checked class="peer hidden">
+                                <div class="p-2 text-center rounded-xl border border-stone-200 peer-checked:border-brand-accent peer-checked:bg-brand-accent/10 peer-checked:text-brand-accent font-semibold transition-all">
+                                    100% Normal
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="sugar" value="70% Less" class="peer hidden">
+                                <div class="p-2 text-center rounded-xl border border-stone-200 peer-checked:border-brand-accent peer-checked:bg-brand-accent/10 peer-checked:text-brand-accent font-semibold transition-all">
+                                    70% Less
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="sugar" value="30% Low" class="peer hidden">
+                                <div class="p-2 text-center rounded-xl border border-stone-200 peer-checked:border-brand-accent peer-checked:bg-brand-accent/10 peer-checked:text-brand-accent font-semibold transition-all">
+                                    30% Low
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="sugar" value="0% Sugar Free" class="peer hidden">
+                                <div class="p-2 text-center rounded-xl border border-stone-200 peer-checked:border-brand-accent peer-checked:bg-brand-accent/10 peer-checked:text-brand-accent font-semibold transition-all">
+                                    0% No Sugar
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Milk Base Option (Beverages) -->
+                    <div id="milkOptionGroup" class="space-y-2">
+                        <label class="block text-xs font-bold uppercase text-stone-500 tracking-wider">Pilihan Susu / Base</label>
+                        <select id="milkChoice" class="w-full bg-stone-100 text-xs rounded-xl p-3 border border-stone-200 font-medium outline-none">
+                            <option value="Fresh Milk (Dairy)" data-price="0">Fresh Milk (Standard)</option>
+                            <option value="Oatmilk (Oatside)" data-price="7000">Oatmilk (+Rp 7.000)</option>
+                            <option value="Almond Milk" data-price="9000">Almond Milk (+Rp 9.000)</option>
+                            <option value="Soy Milk" data-price="6000">Soy Milk (+Rp 6.000)</option>
+                        </select>
+                    </div>
+
+                    <!-- Spicy Level Option (Main Dish) -->
+                    <div id="spicyOptionGroup" class="space-y-2 hidden">
+                        <label class="block text-xs font-bold uppercase text-stone-500 tracking-wider">Tingkat Pedas (Spiciness)</label>
+                        <div class="grid grid-cols-3 gap-2 text-xs">
+                            <label class="cursor-pointer">
+                                <input type="radio" name="spicy" value="Mild / Tidak Pedas" checked class="peer hidden">
+                                <div class="p-2.5 text-center rounded-xl border border-stone-200 peer-checked:border-brand-accent peer-checked:bg-brand-accent/10 peer-checked:text-brand-accent font-semibold transition-all">
+                                    🌶️ Mild (Sedang)
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="spicy" value="Medium" class="peer hidden">
+                                <div class="p-2.5 text-center rounded-xl border border-stone-200 peer-checked:border-brand-accent peer-checked:bg-brand-accent/10 peer-checked:text-brand-accent font-semibold transition-all">
+                                    🌶️🌶️ Medium
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="spicy" value="Extra Hot" class="peer hidden">
+                                <div class="p-2.5 text-center rounded-xl border border-stone-200 peer-checked:border-brand-accent peer-checked:bg-brand-accent/10 peer-checked:text-brand-accent font-semibold transition-all">
+                                    🔥 Extra Hot
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Special Notes for Barista / Chef -->
+                    <div class="space-y-1.5">
+                        <label class="block text-xs font-bold uppercase text-stone-500 tracking-wider">Catatan Khusus</label>
+                        <input type="text" id="modalNotes" placeholder="Misal: Pisahkan es, sauce di wadah terpisah..." class="w-full bg-stone-100 text-xs rounded-xl p-3 border border-stone-200 outline-none">
+                    </div>
+
+                </form>
+            </div>
+
+            <!-- Modal Footer (Quantity & Add Button) -->
+            <div class="p-4 bg-stone-50 border-t border-stone-200 flex items-center justify-between gap-4">
+                <div class="flex items-center bg-white border border-stone-300 rounded-2xl p-1">
+                    <button onclick="updateModalQty(-1)" class="w-8 h-8 rounded-xl bg-stone-100 hover:bg-stone-200 flex items-center justify-center font-bold text-stone-700">-</button>
+                    <span id="modalQtyDisplay" class="w-10 text-center font-bold text-sm">1</span>
+                    <button onclick="updateModalQty(1)" class="w-8 h-8 rounded-xl bg-stone-100 hover:bg-stone-200 flex items-center justify-center font-bold text-stone-700">+</button>
+                </div>
+
+                <button onclick="confirmAddToCart()" class="flex-1 bg-brand-primary text-white py-3 px-4 rounded-2xl font-bold text-xs sm:text-sm shadow-md hover:bg-stone-800 transition-all flex items-center justify-between">
+                    <span>Tambah Pesanan</span>
+                    <span id="modalTotalPrice">Rp 0</span>
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Cart Slide-Over Drawer -->
+    <div id="cartDrawer" class="fixed inset-0 z-50 hidden transition-all duration-300">
+        <!-- Backdrop -->
+        <div onclick="toggleCartDrawer()" class="absolute inset-0 bg-stone-900/50 backdrop-blur-xs"></div>
+        
+        <!-- Drawer Body -->
+        <div class="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl flex flex-col justify-between z-10">
+            
+            <!-- Drawer Header -->
+            <div class="p-5 border-b border-stone-200 flex items-center justify-between bg-brand-bg">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-xl bg-brand-primary text-white flex items-center justify-center font-bold text-sm">
+                        <i class="fa-solid fa-bag-shopping"></i>
+                    </div>
+                    <h3 class="font-bold text-stone-900 text-lg">Keranjang Kamu</h3>
+                </div>
+                <button onclick="toggleCartDrawer()" class="text-stone-400 hover:text-stone-700 p-2 text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Drawer Cart Items (Scrollable) -->
+            <div id="cartItemsContainer" class="flex-1 overflow-y-auto p-5 space-y-4 divide-y divide-stone-100">
+                <!-- Cart Items Injected by JS -->
+            </div>
+
+            <!-- Drawer Footer & Payment Summary -->
+            <div class="p-5 bg-stone-50 border-t border-stone-200 space-y-4">
+                
+                <!-- Promo Code Input -->
+                <div class="flex gap-2">
+                    <input type="text" id="promoInput" placeholder="Kode Promo (e.g. GENZ20)" class="flex-1 bg-white uppercase text-xs rounded-xl p-2.5 border border-stone-300 font-semibold outline-none">
+                    <button onclick="applyPromoCode()" class="bg-stone-800 text-white text-xs font-bold px-4 py-2.5 rounded-xl hover:bg-black transition-all">Gunakan</button>
+                </div>
+                
+                <!-- Calculation Breakdown -->
+                <div class="space-y-1.5 text-xs text-stone-600">
+                    <div class="flex justify-between">
+                        <span>Subtotal</span>
+                        <span id="summarySubtotal" class="font-semibold text-stone-800">Rp 0</span>
+                    </div>
+                    <div class="flex justify-between text-emerald-600 font-medium" id="promoDiscountRow" style="display: none;">
+                        <span>Diskon Promo (GENZ20)</span>
+                        <span id="summaryDiscount">-Rp 0</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Pajak Resto (10%)</span>
+                        <span id="summaryTax" class="font-semibold text-stone-800">Rp 0</span>
+                    </div>
+                    <div class="border-t border-dashed border-stone-300 pt-2 flex justify-between text-sm font-extrabold text-stone-900">
+                        <span>Total Pembayaran</span>
+                        <span id="summaryTotal" class="text-brand-accent text-base">Rp 0</span>
+                    </div>
+                </div>
+
+                <!-- Checkout Button -->
+                <button onclick="openCheckoutModal()" class="w-full bg-brand-primary hover:bg-stone-800 text-white font-bold py-3.5 rounded-2xl text-sm shadow-md transition-all flex items-center justify-center gap-2">
+                    <span>Lanjut Ke Pembayaran</span>
+                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Checkout Screen Modal -->
+    <div id="checkoutModal" class="fixed inset-0 z-50 hidden bg-stone-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl p-6 space-y-5 animate-in zoom-in-95 duration-200">
+            
+            <div class="flex justify-between items-center border-b border-stone-100 pb-3">
+                <h3 class="text-lg font-bold text-stone-900">Konfirmasi & Pembayaran Instant</h3>
+                <button onclick="closeCheckoutModal()" class="text-stone-400 hover:text-stone-700">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Order Method & Table/Address Info -->
+            <div class="space-y-3">
+                <label class="block text-xs font-bold uppercase text-stone-500">Detail Pemesan</label>
+                <div class="grid grid-cols-2 gap-2">
+                    <input type="text" id="custName" placeholder="Nama Lengkap" class="bg-stone-100 text-xs rounded-xl p-3 border border-stone-200 outline-none">
+                    <input type="text" id="custTable" placeholder="Nomor Meja / WA" class="bg-stone-100 text-xs rounded-xl p-3 border border-stone-200 outline-none">
+                </div>
+            </div>
+
+            <!-- Payment Method Selector -->
+            <div class="space-y-2">
+                <label class="block text-xs font-bold uppercase text-stone-500">Pilih Metode Pembayaran</label>
+                <div class="grid grid-cols-3 gap-2 text-xs">
+                    <label class="cursor-pointer">
+                        <input type="radio" name="payment" value="QRIS" checked class="peer hidden">
+                        <div class="p-3 text-center rounded-2xl border border-stone-200 peer-checked:border-brand-primary peer-checked:bg-stone-900 peer-checked:text-white font-bold transition-all flex flex-col items-center gap-1">
+                            <i class="fa-solid fa-qrcode text-base"></i> QRIS Instant
+                        </div>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="payment" value="GoPay/Dana" class="peer hidden">
+                        <div class="p-3 text-center rounded-2xl border border-stone-200 peer-checked:border-brand-primary peer-checked:bg-stone-900 peer-checked:text-white font-bold transition-all flex flex-col items-center gap-1">
+                            <i class="fa-solid fa-wallet text-base"></i> E-Wallet
+                        </div>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="payment" value="Kasir Cash" class="peer hidden">
+                        <div class="p-3 text-center rounded-2xl border border-stone-200 peer-checked:border-brand-primary peer-checked:bg-stone-900 peer-checked:text-white font-bold transition-all flex flex-col items-center gap-1">
+                            <i class="fa-solid fa-money-bill-wave text-base"></i> Cash di Kasir
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- QRIS Mock Screen (Shown by Default) -->
+            <div id="qrisScreen" class="bg-stone-50 border border-stone-200 rounded-2xl p-4 text-center space-y-2">
+                <p class="text-xs text-stone-500">Scan QRIS berikut menggunakan GoPay, ShopeePay, DANA, OVO, / Mobile Banking:</p>
+                <div class="w-36 h-36 bg-white border border-stone-300 p-2 mx-auto rounded-xl flex items-center justify-center">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=NOOKBREWCAFE" alt="QRIS Code" class="w-full h-full object-contain">
+                </div>
+                <p class="text-[10px] text-stone-400">Merchant: NOOK & BREW CO. OFFICIAL</p>
+            </div>
+
+            <!-- Action Buttons -->
+            <button onclick="processFinalPayment()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3.5 rounded-2xl text-sm shadow-md transition-all">
+                Bayar Sekarang & Kirim Pesanan
+            </button>
+
+        </div>
+    </div>
+
+    <!-- Social Vibe & Instagram Grid Section -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 border-t border-stone-200">
+        <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+            <div>
+                <span class="text-brand-accent text-xs font-bold tracking-widest uppercase block mb-1">#NookAndBrewVibes</span>
+                <h3 class="text-2xl font-extrabold text-stone-900">Nongkrong Aesthetic Bareng Gen-Z</h3>
+            </div>
+            <a href="https://instagram.com" target="_blank" class="text-xs font-bold text-stone-800 bg-stone-100 hover:bg-stone-200 px-4 py-2.5 rounded-2xl border border-stone-300 transition-all w-fit flex items-center gap-2">
+                <i class="fa-brands fa-instagram text-base text-pink-600"></i> Follow @nookandbrew.co
+            </a>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div class="relative group rounded-3xl overflow-hidden aspect-square bg-stone-200">
+                <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=600&q=80" alt="Cafe Vibe" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-bold gap-1">
+                    <i class="fa-solid fa-heart text-pink-500"></i> 1.2k
+                </div>
+            </div>
+            <div class="relative group rounded-3xl overflow-hidden aspect-square bg-stone-200">
+                <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=600&q=80" alt="Cafe Interior" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-bold gap-1">
+                    <i class="fa-solid fa-heart text-pink-500"></i> 890
+                </div>
+            </div>
+            <div class="relative group rounded-3xl overflow-hidden aspect-square bg-stone-200">
+                <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=600&q=80" alt="Specialty Coffee" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-bold gap-1">
+                    <i class="fa-solid fa-heart text-pink-500"></i> 2.4k
+                </div>
+            </div>
+            <div class="relative group rounded-3xl overflow-hidden aspect-square bg-stone-200">
+                <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&q=80" alt="Main Dish Culinary" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-bold gap-1">
+                    <i class="fa-solid fa-heart text-pink-500"></i> 1.5k
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Toast Notification Popup -->
+    <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 hidden bg-stone-900 text-white text-xs font-semibold px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 transition-all">
+        <i class="fa-solid fa-circle-check text-emerald-400 text-base" id="toastIcon"></i>
+        <span id="toastMsg">Pesanan berhasil ditambahkan!</span>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-brand-primary text-white border-t border-stone-800 pt-12 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
+                <div class="space-y-3">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-xl bg-white text-brand-primary flex items-center justify-center font-extrabold text-base">N</div>
+                        <span class="font-bold text-lg">Nook & Brew Co.</span>
+                    </div>
+                    <p class="text-xs text-stone-400 leading-relaxed">Spesialis kopi nugas, makanan hangat, dan suasana instagrammable untuk anak muda di Senopati, Jakarta South.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-sm mb-3 text-stone-200">Jam Operasional</h4>
+                    <p class="text-xs text-stone-400">Senin - Minggu: 08.00 - 22.00 WIB</p>
+                    <p class="text-xs text-stone-400 mt-1">Live Acoustic: Sabtu Malam</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-sm mb-3 text-stone-200">Lokasi Kafe</h4>
+                    <p class="text-xs text-stone-400">Jl. Senopati No. 42, Kebayoran Baru, Jakarta Selatan</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-sm mb-3 text-stone-200">Ikuti Kami</h4>
+                    <div class="flex gap-3 text-stone-300">
+                        <a href="#" class="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center hover:bg-white/20 transition-all"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center hover:bg-white/20 transition-all"><i class="fa-brands fa-tiktok"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center hover:bg-white/20 transition-all"><i class="fa-brands fa-spotify"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-stone-800 pt-6 text-center text-xs text-stone-500">
+                &copy; 2026 Nook & Brew Co. Designed for Gen-Z Seamless UX.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        /* Sample Database Items for Cafe Menu */
+        const MENU_DATA = [
+            {
+                id: 1,
+                name: "Iced Matcha Espresso Latte",
+                category: "coffee",
+                subType: "beverage",
+                price: 38000,
+                rating: 4.9,
+                isBestSeller: true,
+                image: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=600&q=80",
+                description: "Perpaduan Uji Matcha Jepang pilihan dengan single shot espresso house blend Arabika dan susu segar krimer."
+            },
+            {
+                id: 2,
+                name: "Pistachio Cream Oat Latte",
+                category: "coffee",
+                subType: "beverage",
+                price: 42000,
+                rating: 4.8,
+                isBestSeller: true,
+                image: "https://images.unsplash.com/photo-1534778101976-62847782c213?auto=format&fit=crop&w=600&q=80",
+                description: "Favorit Gen-Z! Espresso dengan susu Oatside creamy bertabur foam pistachio asli gurih-manis."
+            },
+            {
+                id: 3,
+                name: "Truffle Creamy Butter Pasta",
+                category: "main-dish",
+                subType: "food",
+                price: 58000,
+                rating: 4.9,
+                isBestSeller: true,
+                image: "https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=600&q=80",
+                description: "Fettuccine al dente disiram saus krim minyak truffle aroma wangi khas, disajikan dengan topping parmesan & smoked beef."
+            },
+            {
+                id: 4,
+                name: "Crispy Chicken Sambal Matah Rice Bowl",
+                category: "main-dish",
+                subType: "food",
+                price: 45000,
+                rating: 4.7,
+                isBestSeller: false,
+                image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80",
+                description: "Ayam renyah tanpa tulang disiram sambal matah Bali segar minyak kelapa & telur mata sapi setengah matang."
+            },
+            {
+                id: 5,
+                name: "Cloud Velvet Berry Mocktail",
+                category: "non-coffee",
+                subType: "beverage",
+                price: 34000,
+                rating: 4.6,
+                isBestSeller: false,
+                image: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=600&q=80",
+                description: "Sensasi buah blueberry & raspberry bersoda dingin dipadu lapisan cream cheese lembut di bagian atas."
+            },
+            {
+                id: 6,
+                name: "Smash Beef Cheeseburger & Fries",
+                category: "main-dish",
+                subType: "food",
+                price: 65000,
+                rating: 4.9,
+                isBestSeller: true,
+                image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80",
+                description: "Double patty sapi Australian smash, keju cheddar leleh, brioche bun lembut + kentang goreng bumbu oregano."
+            },
+            {
+                id: 7,
+                name: "Earl Grey Lavender Milk Tea",
+                category: "non-coffee",
+                subType: "beverage",
+                price: 32000,
+                rating: 4.5,
+                isBestSeller: false,
+                image: "https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=600&q=80",
+                description: "Seduhan teh Earl Grey aromatik berpadu esensi lavender alami dan susu murni harum meredakan stres."
+            },
+            {
+                id: 8,
+                name: "Croissant Butter Pudding + Ice Cream",
+                category: "dessert",
+                subType: "food",
+                price: 36000,
+                rating: 4.8,
+                isBestSeller: true,
+                image: "https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=600&q=80",
+                description: "Croissant panggang hangat dalam custard vanila lembut disajikan dengan 1 scoop es krim Vanila Madagascar."
+            },
+            {
+                id: 9,
+                name: "Garlic Butter Truffle Fries",
+                category: "snack",
+                subType: "food",
+                price: 28000,
+                rating: 4.6,
+                isBestSeller: false,
+                image: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=600&q=80",
+                description: "Kentang goreng shoestring garing ditaburi bumbu mentega bawang, parmesan, dan aroma truffle segar."
+            },
+            {
+                id: 10,
+                name: "Matcha Basque Burnt Cheesecake",
+                category: "dessert",
+                subType: "food",
+                price: 38000,
+                rating: 4.9,
+                isBestSeller: true,
+                image: "https://images.unsplash.com/photo-1533134242443-d4fd215305ad?auto=format&fit=crop&w=600&q=80",
+                description: "Cheesecake memanggang gaya Basque khas Spanyol bersensasi matcha pahit manis meluncur halus di lidah."
+            }
+        ];
+
+        /* Application Global State */
+        let state = {
+            activeCategory: 'all',
+            searchQuery: '',
+            bestSellerOnly: false,
+            orderType: 'dine-in',
+            cart: [],
+            appliedPromo: null,
+            promoDiscountPercent: 0,
+            activeModalItem: null,
+            modalQty: 1
+        };
+
+        // Format Currency Helper
+        function formatRupiah(number) {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(number);
+        }
+
+        function renderMenuGrid() {
+            const grid = document.getElementById('productGrid');
+            const emptyState = document.getElementById('emptyState');
+            
+            // Filter logic
+            let filtered = MENU_DATA.filter(item => {
+                const matchCategory = (state.activeCategory === 'all') || 
+                                      (state.activeCategory === 'beverage' && (item.category === 'coffee' || item.category === 'non-coffee')) ||
+                                      (item.category === state.activeCategory);
+                const matchSearch = item.name.toLowerCase().includes(state.searchQuery.toLowerCase()) || 
+                                    item.description.toLowerCase().includes(state.searchQuery.toLowerCase());
+                const matchBestSeller = !state.bestSellerOnly || item.isBestSeller;
+
+                return matchCategory && matchSearch && matchBestSeller;
+            });
+
+            // Update Counter
+            document.getElementById('itemCount').innerText = `${filtered.length} Items`;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            } else {
+                emptyState.classList.add('hidden');
+            }
+
+            // Render Cards
+            grid.innerHTML = filtered.map(item => `
+                <div class="bg-white rounded-3xl overflow-hidden border border-stone-200/80 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group">
+                    <div class="relative h-48 overflow-hidden bg-stone-100 cursor-pointer" onclick="openModal(${item.id})">
+                        <img src="${item.image}" alt="${item.name}" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=600&q=80';" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        ${item.isBestSeller ? `<span class="absolute top-3 left-3 bg-brand-accent text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1"><i class="fa-solid fa-fire text-amber-200"></i> BEST SELLER</span>` : ''}
+                        <span class="absolute bottom-3 right-3 bg-white/90 backdrop-blur-md text-stone-800 text-xs font-bold px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1">
+                            <i class="fa-solid fa-star text-amber-400"></i> ${item.rating}
+                        </span>
+                    </div>
+
+                    <div class="p-5 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="text-[10px] uppercase tracking-widest text-brand-accent font-bold mb-1">${item.category}</div>
+                            <h3 class="font-bold text-stone-900 text-base group-hover:text-brand-primary transition-colors cursor-pointer" onclick="openModal(${item.id})">${item.name}</h3>
+                            <p class="text-stone-500 text-xs mt-1.5 line-clamp-2 leading-relaxed">${item.description}</p>
+                        </div>
+
+                        <div class="flex items-center justify-between mt-5 pt-3 border-t border-stone-100">
+                            <div>
+                                <span class="text-xs text-stone-400 block text-[10px]">Harga</span>
+                                <span class="font-extrabold text-stone-900 text-base">${formatRupiah(item.price)}</span>
+                            </div>
+                            <button onclick="openModal(${item.id})" class="bg-stone-100 hover:bg-brand-primary hover:text-white text-stone-800 font-semibold px-3.5 py-2 rounded-2xl text-xs transition-all duration-200 flex items-center gap-1.5">
+                                <i class="fa-solid fa-plus"></i> Order
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        /* Filter Handlers */
+        function filterCategory(cat) {
+            state.activeCategory = cat;
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('bg-brand-primary', 'text-white', 'shadow-sm');
+                btn.classList.add('bg-white', 'text-brand-textDark');
+            });
+            const activeBtn = document.getElementById(`cat-${cat}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('bg-white', 'text-brand-textDark');
+                activeBtn.classList.add('bg-brand-primary', 'text-white', 'shadow-sm');
+            }
+
+            // Update title
+            const titleMap = {
+                'all': 'Semua Menu Kafe',
+                'coffee': 'Kopi Artisan & Espresso',
+                'non-coffee': 'Non-Coffee & Fresh Tea',
+                'main-dish': 'Main Dish & Pastas',
+                'snack': 'Snacks & Light Bites',
+                'dessert': 'Desserts & Croissants'
+            };
+            document.getElementById('sectionTitle').innerText = titleMap[cat] || 'Menu Kafe';
+            renderMenuGrid();
+        }
+
+        function handleSearch(val) {
+            state.searchQuery = val;
+            renderMenuGrid();
+        }
+
+        function toggleBestSellerOnly() {
+            state.bestSellerOnly = !state.bestSellerOnly;
+            const btn = document.getElementById('btnBestSeller');
+            if (state.bestSellerOnly) {
+                btn.classList.add('bg-amber-500', 'text-white');
+            } else {
+                btn.classList.remove('bg-amber-500', 'text-white');
+            }
+            renderMenuGrid();
+        }
+
+        function setOrderType(type) {
+            state.orderType = type;
+            ['DineIn', 'Takeaway', 'Delivery'].forEach(t => {
+                const btn = document.getElementById(`btn${t}`);
+                if (t.toLowerCase() === type.replace('-', '')) {
+                    btn.className = 'px-3 py-1.5 rounded-xl transition-all duration-200 bg-white text-brand-primary shadow-sm';
+                } else {
+                    btn.className = 'px-3 py-1.5 rounded-xl transition-all duration-200 text-stone-600 hover:text-stone-900';
+                }
+            });
+            showToast(`Metode pesanan diubah ke ${type.toUpperCase()}`);
+        }
+
+        function openModal(itemId) {
+            const item = MENU_DATA.find(i => i.id === itemId);
+            if (!item) return;
+
+            state.activeModalItem = item;
+            state.modalQty = 1;
+
+            document.getElementById('modalTitle').innerText = item.name;
+            document.getElementById('modalBasePrice').innerText = formatRupiah(item.price);
+            document.getElementById('modalDescription').innerText = item.description;
+            document.getElementById('modalImg').src = item.image;
+            document.getElementById('modalCategoryBadge').innerText = item.category.toUpperCase();
+            document.getElementById('modalNotes').value = '';
+
+            // Toggle customization options based on food vs beverage
+            const tempGrp = document.getElementById('tempOptionGroup');
+            const sugarGrp = document.getElementById('sugarOptionGroup');
+            const milkGrp = document.getElementById('milkOptionGroup');
+            const spicyGrp = document.getElementById('spicyOptionGroup');
+
+            if (item.subType === 'beverage') {
+                tempGrp.classList.remove('hidden');
+                sugarGrp.classList.remove('hidden');
+                milkGrp.classList.remove('hidden');
+                spicyGrp.classList.add('hidden');
+            } else {
+                tempGrp.classList.add('hidden');
+                sugarGrp.classList.add('hidden');
+                milkGrp.classList.add('hidden');
+                spicyGrp.classList.remove('hidden');
+            }
+
+            updateModalPrice();
+            document.getElementById('customModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('customModal').classList.add('hidden');
+        }
+
+        function updateModalQty(delta) {
+            state.modalQty = Math.max(1, state.modalQty + delta);
+            document.getElementById('modalQtyDisplay').innerText = state.modalQty;
+            updateModalPrice();
+        }
+
+        function updateModalPrice() {
+            if (!state.activeModalItem) return;
+            let base = state.activeModalItem.price;
+
+            // Check milk extra
+            if (state.activeModalItem.subType === 'beverage') {
+                const milkSelect = document.getElementById('milkChoice');
+                const milkExtra = parseInt(milkSelect.options[milkSelect.selectedIndex].getAttribute('data-price') || 0);
+                base += milkExtra;
+            }
+
+            const total = base * state.modalQty;
+            document.getElementById('modalTotalPrice').innerText = formatRupiah(total);
+        }
+
+        document.getElementById('milkChoice').addEventListener('change', updateModalPrice);
+
+        function confirmAddToCart() {
+            const item = state.activeModalItem;
+            if (!item) return;
+
+            let customText = [];
+            if (item.subType === 'beverage') {
+                const temp = document.querySelector('input[name="temperature"]:checked').value;
+                const sugar = document.querySelector('input[name="sugar"]:checked').value;
+                const milkSelect = document.getElementById('milkChoice');
+                const milk = milkSelect.value;
+                customText.push(`${temp}`, `Sugar: ${sugar}`, `${milk}`);
+            } else {
+                const spicy = document.querySelector('input[name="spicy"]:checked').value;
+                customText.push(`Pedas: ${spicy}`);
+            }
+
+            const notes = document.getElementById('modalNotes').value.trim();
+            if (notes) customText.push(`Catatan: ${notes}`);
+
+            // Calculate extra pricing
+            let extraPrice = 0;
+            if (item.subType === 'beverage') {
+                const milkSelect = document.getElementById('milkChoice');
+                extraPrice += parseInt(milkSelect.options[milkSelect.selectedIndex].getAttribute('data-price') || 0);
+            }
+
+            const cartItem = {
+                cartId: Date.now(),
+                id: item.id,
+                name: item.name,
+                price: item.price + extraPrice,
+                qty: state.modalQty,
+                customization: customText.join(' • '),
+                image: item.image
+            };
+
+            state.cart.push(cartItem);
+            updateCartUI();
+            closeModal();
+            showToast(`${item.name} berhasil ditambahkan!`);
+        }
+
+        function toggleCartDrawer() {
+            const drawer = document.getElementById('cartDrawer');
+            drawer.classList.toggle('hidden');
+        }
+
+        function updateCartUI() {
+            const countBadge = document.getElementById('cartBadgeCount');
+            const totalItems = state.cart.reduce((acc, curr) => acc + curr.qty, 0);
+            countBadge.innerText = totalItems;
+
+            const container = document.getElementById('cartItemsContainer');
+
+            if (state.cart.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-12 text-stone-400">
+                        <i class="fa-solid fa-basket-shopping text-4xl mb-3"></i>
+                        <p class="text-xs font-semibold">Keranjang kamu masih kosong</p>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = state.cart.map(item => `
+                    <div class="pt-3 flex gap-3 items-center">
+                        <img src="${item.image}" alt="${item.name}" class="w-14 h-14 object-cover rounded-xl bg-stone-100">
+                        <div class="flex-1">
+                            <h4 class="font-bold text-xs text-stone-900">${item.name}</h4>
+                            <p class="text-[10px] text-stone-400 mt-0.5">${item.customization}</p>
+                            <span class="font-extrabold text-xs text-brand-primary block mt-1">${formatRupiah(item.price)} x ${item.qty}</span>
+                        </div>
+                        <button onclick="removeCartItem(${item.cartId})" class="text-stone-400 hover:text-red-500 p-2">
+                            <i class="fa-solid fa-trash-can text-xs"></i>
+                        </button>
+                    </div>
+                `).join('');
+            }
+
+            calculateCartSummary();
+        }
+
+        function removeCartItem(cartId) {
+            state.cart = state.cart.filter(i => i.cartId !== cartId);
+            updateCartUI();
+        }
+
+        function calculateCartSummary() {
+            const subtotal = state.cart.reduce((acc, curr) => acc + (curr.price * curr.qty), 0);
+            const discount = subtotal * (state.promoDiscountPercent / 100);
+            const tax = (subtotal - discount) * 0.10; // Resto Tax 10%
+            const grandTotal = (subtotal - discount) + tax;
+
+            document.getElementById('summarySubtotal').innerText = formatRupiah(subtotal);
+            document.getElementById('summaryTax').innerText = formatRupiah(tax);
+            document.getElementById('summaryTotal').innerText = formatRupiah(grandTotal);
+
+            if (state.promoDiscountPercent > 0) {
+                document.getElementById('promoDiscountRow').style.display = 'flex';
+                document.getElementById('summaryDiscount').innerText = `-${formatRupiah(discount)}`;
+            } else {
+                document.getElementById('promoDiscountRow').style.display = 'none';
+            }
+        }
+
+        function applyPromoCode() {
+            const code = document.getElementById('promoInput').value.trim().toUpperCase();
+            if (code === 'GENZ20') {
+                state.appliedPromo = 'GENZ20';
+                state.promoDiscountPercent = 20;
+                calculateCartSummary();
+                showToast('Promo Diskon 20% Berhasil Diterapkan!');
+            } else {
+                showToast('Kode promo tidak valid!');
+            }
+        }
+
+        function openCheckoutModal() {
+            if (state.cart.length === 0) {
+                showToast('Keranjang kamu masih kosong!');
+                return;
+            }
+            toggleCartDrawer();
+            document.getElementById('checkoutModal').classList.remove('hidden');
+        }
+
+        function closeCheckoutModal() {
+            document.getElementById('checkoutModal').classList.add('hidden');
+        }
+
+        function processFinalPayment() {
+            const name = document.getElementById('custName').value.trim();
+            if (!name) {
+                showToast('Silakan isi nama kamu terlebih dahulu');
+                return;
+            }
+
+            closeCheckoutModal();
+            state.cart = [];
+            state.promoDiscountPercent = 0;
+            updateCartUI();
+
+            showToast(`Terima kasih ${name}! Pesanan kamu sedang disiapkan barista 🎉`);
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').innerText = msg;
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+
+        function resetFilters() {
+            state.searchQuery = '';
+            document.getElementById('searchInput').value = '';
+            filterCategory('all');
+        }
+
+        // Initialize App on Page Load
+        window.onload = function() {
+            renderMenuGrid();
+            updateCartUI();
+        };
+    </script>
+</body>
+</html>
